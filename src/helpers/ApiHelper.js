@@ -32,7 +32,7 @@ export const getClients = async () => {
 };
 
 
-// export const handleSubmit = async (e,comp_name, contact_email, industry ) =>{
+/* export const handleSubmit = async (e,comp_name, contact_email, industry ) =>{
 //         //e.preventDefault();//stops page refresh
 //         const data = {
 //             comp_name :comp_name,
@@ -57,7 +57,7 @@ export const getClients = async () => {
 //           //return null; // Return null on error
 //         }
         
-//     };
+//     };*/
 
 
 
