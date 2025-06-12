@@ -31,56 +31,32 @@ export const getClients = async () => {
   }
 };
 
-
-// export const handleSubmit = async (e,comp_name, contact_email, industry ) =>{
-//         //e.preventDefault();//stops page refresh
-//         const data = {
-//             comp_name :comp_name,
-//             contact_email : contact_email,
-//             industry : industry
-//           };
-//           try {
-//           const res = await axiosInstance.post('/clients/', data);
-//           alert(`Name: ${comp_name}, Contact_Email: ${contact_email}, Industry: ${industry}`);
-//           if (res.status === 200 || res.status === 201) {
-//             alert('Submitted successfully!')
-//             console.log(res.data)
-//             //return res.data; // Return the response data
-//           } else {
-//             alert('Error submitting form.');
-//             console.log('Error')
-//             //return null; // Return null on error
-//           }
-//         } catch (error) {
-//           console.error(error);
-//           alert('Error Exception',error);
-//           //return null; // Return null on error
-//         }
-        
-//     };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export const postClient = async (clientData) => {
+  try {
+    const response = await apiClient.post(`/clients/`,clientData);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: 'Failed to fetch clients' };
+  }
+};
+//updation
+export const updateClient = async(id, updateData) => {
+  try{
+    const res = await apiClient.put(`/clients/${id}/`,updateData);
+    return res.data;
+  }catch(err){
+   throw err.res?.data || { "Frontend Error":err };
+  }
+};
+//deletion for selected clients
+export const deleteClient = async(id) =>{
+  try{
+    const res = await apiClient.delete(`/clients/${id}/`);
+    return res.data;
+  }catch(err){
+    throw err.res?.data || {"Frontend Error":err};
+  }
+};
 
 
 // LOGIN (get JWT tokens)

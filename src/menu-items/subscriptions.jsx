@@ -15,7 +15,7 @@ const subscriptions = {
       id: 'subscriptions',
       title: 'Subscriptions',
       type: 'item',
-      url: '/subscriptions',
+      url: '/subscription',
       icon: icons.CreditCardOutlined,
       breadcrumbs: false
     }
