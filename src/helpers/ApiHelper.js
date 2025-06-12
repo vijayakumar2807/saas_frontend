@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { identity } from 'lodash-es';
 
 // For Vite use import.meta.env, for CRA use process.env
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || process.env.REACT_APP_API_BASE_URL;
@@ -30,6 +31,38 @@ export const getClients = async () => {
     throw error.response?.data || { error: 'Failed to fetch clients' };
   }
 };
+
+export const postClients = async (clientdata) => {
+  try{
+    const response = await apiClient.post('/clients/', clientdata);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || {error: "Failed to create clients!"};
+  }
+};
+
+export const updateClients = async(id, updatedata) => {
+  try{
+    const response = await apiClient.put(`/clients/${id}/`, updatedata);
+    return response.data;
+  } catch (error){
+    throw error.response?.data || {error: "Failed to update clients!"};
+  }
+};
+
+export const deleteClients = async(id) => {
+  try{
+    const response = await apiClient.delete(`/clients/${id}/`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || {error: "Failed to delete clients!"};
+  }
+};
+
+
+
+
+
 
 
 /* export const handleSubmit = async (e,comp_name, contact_email, industry ) =>{
