@@ -58,6 +58,32 @@ export const getClients = async () => {
 //         }
         
 //     };
+export const postClient = async (clientData) => {
+  try {
+    const response = await apiClient.post(`/clients/`,clientData);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: 'Failed to fetch clients' };
+  }
+};
+//updation
+export const updateClient = async(id, updateData) => {
+  try{
+    const res = await apiClient.put(`/clients/${id}/`,updateData);
+    return res.data;
+  }catch(err){
+   throw err.res?.data || { "Frontend Error":err };
+  }
+};
+//deletion for selected clients
+export const deleteClient = async(id) =>{
+  try{
+    const res = await apiClient.delete(`/clients/${id}/`);
+    return res.data;
+  }catch(err){
+    throw err.res?.data || {"Frontend Error":err};
+  }
+};
 
 
 

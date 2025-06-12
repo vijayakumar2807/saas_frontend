@@ -36,7 +36,7 @@
     "@mui/x-charts": "8.1.0",
     "@mui/x-data-grid": "^8.5.1",
     "@vitejs/plugin-react": "4.4.1",
-    "antd": "^5.25.4",
+    "antd": "^5.26.0",
     "axios": "^1.9.0",
     "formik": "2.4.6",
     "framer-motion": "12.8.2",

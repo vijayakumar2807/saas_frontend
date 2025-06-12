@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { postClient } from '../../helpers/ApiHelper';
+// import {Button} form 'antd'
 function Form() {
     const [company_name,setName] = useState('');
     const [contact_email, setEmail] = useState('');
     const [industry, setIndustry] = useState('');
-    //const [response, setResponse] = useState('');
     const client_Submit = async (e) => {
         e.preventDefault();//stops page refresh
         const data = {
@@ -15,9 +15,9 @@ function Form() {
           try{
             await postClient(data);
           }catch(error){
-            alert("Error");
+            alert("Successful Failure");
           }
-    }
+    };
 
   return (
     <div>
@@ -31,7 +31,13 @@ function Form() {
         <label>Industry:</label><br/>
         <input type = 'text' value = {industry} name = 'industry'
         onChange = {(e) => setIndustry(e.target.value)} /><br/>
-        <button type = "submit">SUBMIT</button>
+        <label>  </label><br/>
+        <button type = "submit"  >SUBMIT</button>
+        <style>
+          {
+
+          }
+        </style>
       </form>
     </div>
   );
