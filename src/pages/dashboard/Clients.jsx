@@ -155,19 +155,22 @@ function Clients() {
       </Row>
 
       {/* Delete Button */}
-      <Row justify="end" style={{ marginBottom: '1rem' }}>
+      <Row justify="start" style={{ marginBottom: '1rem' }}>
         <Col>
           <Popconfirm
-            title="Confirm to delete selected clients?"
-            onConfirm={deleteSelected}
-            okText="Yes"
-            cancelText="No"
-            disabled={selectRowKeys.length === 0}
-          >
-            <Button danger disabled={selectRowKeys.length === 0}>
-              Delete Selected
-            </Button>
-          </Popconfirm>
+  title="Confirm to delete selected clients?"
+  onConfirm={deleteSelected}
+  okText="Yes"
+  cancelText="No"
+  getPopupContainer={() => document.body}
+  popupStyle={{ zIndex: 1500 }} 
+  disabled={selectRowKeys.length === 0}
+>
+  <Button danger disabled={selectRowKeys.length === 0}>
+    Delete
+  </Button>
+</Popconfirm>
+
         </Col>
       </Row>
 
