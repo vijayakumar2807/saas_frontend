@@ -4,12 +4,14 @@ import DashboardLayout from 'layout/Dashboard';
 import PrivateRoute from 'routes/PrivateRoute';
 
 
+
 // Pages
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')));
 const Clients = Loadable(lazy(() => import('pages/dashboard/clients')));
 const Users = Loadable(lazy(() => import('pages/dashboard/User')));
 const Plans = Loadable(lazy(() => import('pages/dashboard/Plans')));
 const Subscription = Loadable(lazy(() => import('pages/dashboard/Subscription')));
+const Leads = Loadable(lazy(() => import('pages/dashboard/Leads')));
 const MainRoutes = {
   path: '/',
   element: <PrivateRoute />, // 👈 Protect all child routes
@@ -46,6 +48,10 @@ const MainRoutes = {
         {
           path: 'subscription',
           element: <Subscription />
+        },
+        {
+          path:'leads',
+          element:<Leads/>
         }
        
       

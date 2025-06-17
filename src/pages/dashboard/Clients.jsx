@@ -184,6 +184,7 @@ function Clients() {
           columns={columns}
           rowKey="id"
           rowSelection={rowSelect}
+          
         />
       )}
     </>

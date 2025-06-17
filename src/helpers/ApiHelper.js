@@ -59,6 +59,83 @@ export const deleteClient = async(id) =>{
 };
 
 
+//For Users
+export const getUsers = async() => {
+  try{
+    const response = await apiClient.get('/users/');
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || {error: "Failed to get users!"};
+  }
+};
+
+export const postUsers = async(userdata) => {
+  try{
+    const response = await apiClient.post('/users/', userdata)
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || {error: "Failed to post users!"};
+  }
+};
+
+export const putUsers = async (id, update_user) => {
+  try{
+    const response = await apiClient.put(`/users/${id}`, update_user);
+    return response.data;
+  } catch(error){
+    throw error.response?.data || {error : "Failed to put users!"};
+  }
+};
+
+export const deleteUsers = async (id) => {
+  try{
+    const response = await apiClient.delete(`/users/${id}/`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || {error: "Failed to delete users!"};
+  }
+};
+
+
+//read the plan data(getPlans)
+export const getPlans = async() =>{
+  try{
+    const res =await apiClient.get(`/plans/`);
+    return res.data;
+  }catch(err){
+    throw err.res?.data ||{err:'Failed to get  Plan Data'};
+  }
+};
+
+//add plan data()
+export const postPlan = async(planData) =>{
+  try{
+    const res = await apiClient.post('/plans/', planData);
+    return res.data;
+  }catch(err){
+    throw err.res?.data ||{err:'Failed to get Plan Data'};
+  }
+};
+//update plan data
+export const updatePlan = async (id, updatePlanData) =>{
+  try{
+    const res = await apiClient.put(`/plans/${id}/`,updatePlanData);
+    return res.data;
+  }catch(err){
+    throw err.res?.data ||{err:"Failed to update"}
+  }
+};
+
+//delete plan data
+export const deletePlan = async (id) => {
+  try{
+    const res =   await apiClient.delete(`/plans/${id}/`);
+    return res.data;
+  }catch(err){
+    throw err.res?.data ||{err:"Failed to Delete Plan Data"};
+  }
+};
+
 // LOGIN (get JWT tokens)
 export const loginUser = async (credentials) => {
   try {
