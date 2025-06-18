@@ -138,7 +138,7 @@ return (
        <AntForm.Item name="client_id" label = "Client" rules={[{required: true}]}>
         <Select placeholder = "Select Client">
           {clients.map((client) => (
-              <Select.Option key={client.id} value={client.id}>
+              <Select.Option key={client.id} value={client.id} >
                   {client.company_name}
               </Select.Option>
               ))};

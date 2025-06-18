@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import {Table, Spin, Alert, Button, Form as AntForm, Modal, Input, message, Popconfirm, Row, Col} from 'antd';
 import{getPlans, postPlan, updatePlan, deletePlan} from '../../helpers/ApiHelper';
+import { style } from '@mui/system';
 import { AlignCenterOutlined } from '@ant-design/icons';
+
 function Plans() {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading ] = useState(true);
@@ -26,7 +28,7 @@ function Plans() {
     }, []);
 
 
-  const rowSelect ={
+  const rowSelect = {
     selectRowKeys,
     onChange: (keys) =>setSelectRowKeys(keys),
   };
@@ -48,7 +50,7 @@ function Plans() {
         await deletePlan(id);
       }
       message.success('Selected Plans Deleted');
-      setPlans(prev => prev.filter(client => !selectRowKeys.includes(plans.id)));
+      setPlans(prev => prev.filter(client => !selectRowKeys.includes(client.id)));
       setSelectRowKeys([]);
     }catch(err){
       message.error('Failed to Delete');
@@ -98,12 +100,6 @@ function Plans() {
       title:'Duration',
       dataIndex:'duration',
       key:'duration'
-    },
-    {
-      title:'Date',
-      dataIndex:'date',
-      key:'date',
-      render:(text) => new Date(text).toLocaleDateString(),
     },
     {
       title:'Update',
