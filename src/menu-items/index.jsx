@@ -6,10 +6,11 @@ import users from './Users';
 import plans from './Plans';
 import subscriptions from './subscriptions';
 import leads from './Lead';
+import My_Plans from './myplans';
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [dashboard,clients,users,plans,subscriptions,leads]
+  items: [dashboard,clients,users,plans,subscriptions,leads, My_Plans]
 };
 
 export default menuItems;

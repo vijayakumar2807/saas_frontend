@@ -4,6 +4,7 @@ import {
   Form as AntForm, Modal, Input, message, Popconfirm, Row, Col
 } from 'antd';
 import { getClients, postClient, updateClient, deleteClient } from '../../helpers/ApiHelper';
+import { width } from '@mui/system';
 
 function Clients() {
   const [clients, setClients] = useState([]);
@@ -13,6 +14,7 @@ function Clients() {
   const [form] = AntForm.useForm();
   const [currentClient, setCurrentClient] = useState(null);
   const [selectRowKeys, setSelectRowKeys] = useState([]);
+  const [searchClients, setSearchClients] = useState(null);
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -79,6 +81,22 @@ function Clients() {
       message.error('Operation failed');
     }
   };
+
+  <Row gutter={16} style={{marginBottom: '1rem'}}>
+    <Col>
+      <Select placeholder = "Filter by Client"
+              allowClear
+              style = {{width: 200}}
+              value = {filteredClientId}
+              onChange = {(value) => setSearchClients(value || null)}>
+                {clients.map(client => (
+                  <Select.Option key={client.id} value={client.id}>
+                    {client.company_name}
+                  </Select.Option>
+                ))}
+        </Select>
+    </Col>
+  </Row>
 
   const columns = [
     {

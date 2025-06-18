@@ -80,7 +80,7 @@ export const postUsers = async(userdata) => {
 
 export const putUsers = async (id, update_user) => {
   try{
-    const response = await apiClient.put(`/users/${id}`, update_user);
+    const response = await apiClient.put(`/users/${id}/`, update_user);
     return response.data;
   } catch(error){
     throw error.response?.data || {error : "Failed to put users!"};

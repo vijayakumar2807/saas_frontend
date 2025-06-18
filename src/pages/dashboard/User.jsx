@@ -5,6 +5,7 @@ import { getClients, getUsers, deleteUsers, putUsers, postUsers } from '../../he
 import { set } from 'immutable';
 import Password from 'antd/es/input/Password';
 import { Tab } from '@headlessui/react';
+const { Option } = Select;
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -15,6 +16,7 @@ function Users() {
   const [form] = AntForm.useForm();
   const [selectedUsers, setSelectedUsers] = useState(null);
   const [selectRowKeys, setSelectRowKeys] = useState([]);
+  const [searchClients, setSearchClients] = useState(null);
 
 useEffect(() => {
   const fetchdata = async () => {
@@ -35,7 +37,7 @@ useEffect(() => {
 }, []);
 
 const RowSelection = {
-  selectedRowKeys: selectRowKeys, onChange: (keys) => setSelectRowKeys(keys),
+  selectRowKeys, onChange: (keys) => setSelectRowKeys(keys),
 };
 
 const deleteSelected = async () => {
@@ -44,7 +46,7 @@ const deleteSelected = async () => {
       await deleteUsers(id);
     }
     toast.success("Users deleted successfully.")
-    setUsers(prev => prev.filter(users => !selectRowKeys.includes(users.id)));
+    setUsers(prev => prev.filter(client => !selectRowKeys.includes(client.id)));
     setSelectRowKeys([]);
   } catch(error) {
     toast.error("Failed to delete users!");
@@ -64,6 +66,7 @@ const handleAdd = () => {
 };
 
 const handleSubmit = async (values) => {
+  console.log("Form Values:", values);
   try{
   if (selectedUsers) {
     await putUsers(selectedUsers.id, values);
@@ -80,16 +83,18 @@ const handleSubmit = async (values) => {
     toast.error("Failed! Please try again!");
   }
 };
+
 const columns = [
   {
     title: 'Client',
     dataIndex: "client",
     key: 'client',
-    render: (clientId) => {
-      const client = clients.find(c => c.id === clientId);
-      return client ? client.company_name : 'Unknown';
+    render: (_, record) => {
+      console.log("Client field:" , record.client);
+      const clientobj = clients.find(c => c.id === record.client);  
+      return clientobj ? clientobj.company_name : 'Unknown';
     }
-    },
+  },
   {
     title: 'Name',
     dataIndex: 'name',
@@ -135,13 +140,13 @@ return (
           onFinish={handleSubmit}
           layout='vertical'
       >
-       <AntForm.Item name="client_id" label = "Client" rules={[{required: true}]}>
-        <Select placeholder = "Select Client">
-          {clients.map((client) => (
-              <Select.Option key={client.id} value={client.id}>
+       <AntForm.Item name="client" label = "Client" rules={[{required: true}]}>
+        <Select placeholder = "Select Client">  
+          {clients.map(client => (
+              <Option key={client.id} value={client.id}>
                   {client.company_name}
-              </Select.Option>
-              ))};
+              </Option>
+              ))}
         </Select>
        </AntForm.Item>
        <AntForm.Item name="name" label="Name" rules={[{required:true}]}>
@@ -193,9 +198,31 @@ return (
       </Col>
       </Row>
 
+      <Row gutter={16} style={{marginBottom: '1rem'}}>
+    <Col>
+      <Select placeholder = "Filter by Client"
+              allowClear
+              style = {{width: 200}}
+              value = {searchClients}
+              onChange = {(value) => setSearchClients(value || null)}>
+                {clients.map(client => (
+                  <Select.Option key={client.id} value={client.id}>
+                    {client.company_name}
+                  </Select.Option>
+                ))}
+        </Select>
+    </Col>
+  </Row>
+
+  {searchClients && (
+  <div style={{marginBottom: '0.5rem'}}>
+    Showing users for: <strong>{clients.find(c => c.id === searchClients)?.company_name}</strong>
+  </div>
+  )}
       {error && <Alert type='error' message={error} showIcon style={{marginBottom: '1rem'}}/>} 
           {loading ? (<Spin tip="Loading clients..."/>) : 
-            (<Table dataSource={users}
+            (<Table dataSource={searchClients ? users.filter
+              (user => user.client === searchClients) : users}
                     columns={columns}
                     rowKey="id"
                     rowSelection={RowSelection}
