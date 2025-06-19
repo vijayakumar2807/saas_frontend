@@ -1,8 +1,8 @@
 // import { PhosphorLogo } from "phosphor-react"
 import { Breadcrumb } from "antd";
-import { User } from "phosphor-react"
+import { IdentificationBadge } from "phosphor-react"
 const icon ={
-    User
+    IdentificationBadge,
 };
 //=======================|| menu ||=============//
 const myemployee = {
@@ -15,7 +15,7 @@ const myemployee = {
             title:'Employee',
             type:'item',
             url:'/myemployee',
-            icon: icon.User,
+            icon:() => <icon.IdentificationBadge size={22} color="#053165" weight = 'regular' />,
             breadcrumbs: false,
         }
     ]

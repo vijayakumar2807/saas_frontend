@@ -4,6 +4,7 @@ import {
   Form as AntForm, Modal, Input, message, Popconfirm, Row, Col
 } from 'antd';
 import { getClients, postClient, updateClient, deleteClient } from '../../helpers/ApiHelper';
+import Search from 'antd/es/transfer/search';
 
 function Clients() {
   const [clients, setClients] = useState([]);
@@ -13,7 +14,7 @@ function Clients() {
   const [form] = AntForm.useForm();
   const [currentClient, setCurrentClient] = useState(null);
   const [selectRowKeys, setSelectRowKeys] = useState([]);
-
+  const [search, setSearch] = useState('');
   useEffect(() => {
     const fetchClients = async () => {
       try {
@@ -28,6 +29,7 @@ function Clients() {
 
     fetchClients();
   }, []);
+
 
   const rowSelect = {
     selectRowKeys,
@@ -59,6 +61,13 @@ function Clients() {
     setModalVisible(true);
   };
 
+  // const filterClients = Clients.filter(client => 
+  //   Object.values(client)
+  //   .join(' ')
+  //   .toLowerCase()
+  //   .includes(searchText.toLowerCase())
+  // );
+
   const handleFormSubmit = async (values) => {
     try {
       if (currentClient) {
@@ -85,6 +94,16 @@ function Clients() {
       title: 'Company Name',
       dataIndex: 'company_name',
       key: 'company_name',
+    },
+    {
+      title: 'First Name',
+      dataIndex: 'first_name',
+      key: 'first_name'
+    },
+    {
+      title:'Last Name',
+      dataIndex:'last_name',
+      key:'last_name'
     },
     {
       title: 'Contact Email',
@@ -126,13 +145,22 @@ function Clients() {
           onFinish={handleFormSubmit}
           layout="vertical"
         >
-          <AntForm.Item name="company_name" label="Company" rules={[{ required: true }]}>
+          <AntForm.Item name="company_name" label="Company :" rules={[{ required: true }]}>
             <Input />
           </AntForm.Item>
-          <AntForm.Item name="contact_email" label="Email" rules={[{ required: true, type: 'email' }]}>
+          <AntForm.Item name= "first_name" label = "First Name :" rules = { [{ required:true}]}>
+            <Input/>
+          </AntForm.Item>
+          <AntForm.Item name= "last_name" label ="Last Name :" rules={[{defaultField :'Nil'}]}>
+            <Input/>
+          </AntForm.Item>
+          <AntForm.Item name="contact_email" label="Email :" rules={[{ required: true, type: 'email' }]}>
             <Input />
           </AntForm.Item>
-          <AntForm.Item name="industry" label="Industry" rules={[{ required: true }]}>
+          <AntForm.Item name= "password" label = "Password :" rules ={[{ required: true}]}>
+            <Input.Password/>
+          </AntForm.Item>
+          <AntForm.Item name="industry" label="Industry :" rules={[{ required: true }]}>
             <Input />
           </AntForm.Item>
           <AntForm.Item>
@@ -173,6 +201,14 @@ function Clients() {
 
         </Col>
       </Row>
+      <Row style={{ marginBottom: '1rem'}}>
+        <Col>
+        <Input.Search 
+        placeholder = "Search Clients..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}/>
+        </Col>
+      </Row>
 
       {/* Alert and Table */}
       {error && <Alert type="error" message={error} showIcon style={{ marginBottom: '1rem' }} />}
@@ -180,7 +216,18 @@ function Clients() {
         <Spin tip="Loading clients..." />
       ) : (
         <Table
-          dataSource={clients}
+          dataSource={clients.filter((client) => {
+            const Search = (search ||'').toLowerCase();
+            return(
+              (client.first_name || '').toLowerCase().includes(Search) ||
+              (client.last_name || '').toLowerCase().includes(Search) ||
+              (client.contact_email ||'').toLowerCase().includes(Search) ||
+              (client.company_name ||'').toLowerCase().includes(Search) ||
+              (client.industry ||'').toLowerCase().includes(Search) || 
+              (client.created_at ? new Date(client.create_at).toLocaleString() : '').toLowerCase().includes(Search) 
+              //(client.find(c =>c.id === client)?.company_name || '')
+            );
+          })}
           columns={columns}
           rowKey="id"
           rowSelection={rowSelect}
