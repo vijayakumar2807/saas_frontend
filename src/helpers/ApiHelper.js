@@ -136,6 +136,16 @@ export const deletePlan = async (id) => {
   }
 };
 
+//for groups(roles)
+export const getGroups = async (id) => {
+  try{
+    const response = await apiClient.get('/roles/');
+    return response.data;
+  } catch (error) {
+      throw error?.response.data || {error: "Failed to get groups!"};
+  }
+};
+
 // LOGIN (get JWT tokens)
 export const loginUser = async (credentials) => {
   try {

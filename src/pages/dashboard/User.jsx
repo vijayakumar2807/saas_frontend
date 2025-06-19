@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Spin, Alert, Modal, Form as AntForm , Input, Button, Popconfirm, Row, Col, Select} from 'antd';
-import { getClients, getUsers, deleteUsers, putUsers, postUsers } from '../../helpers/ApiHelper';
+import { Table, Spin, Alert, Modal, Form as AntForm , Input, Button, Popconfirm, Row, Col, Select, Checkbox} from 'antd';
+import { getClients, getUsers, deleteUsers, putUsers, postUsers, getGroups} from '../../helpers/ApiHelper';
  import { toast } from 'react-toastify';
 import { set } from 'immutable';
 import Password from 'antd/es/input/Password';
@@ -16,16 +16,19 @@ function Users() {
   const [form] = AntForm.useForm();
   const [selectedUsers, setSelectedUsers] = useState(null);
   const [selectRowKeys, setSelectRowKeys] = useState([]);
-  const [searchClients, setSearchClients] = useState(null);
+  const [search, setSearch] = useState('');
+  const [roles, setRoles] = useState([]);
 
 useEffect(() => {
   const fetchdata = async () => {
     try{
-      const [userData, clientData] = await Promise.all([getUsers(), getClients()]);
+      const [userData, clientData, groupData] = await Promise.all([getUsers(), getClients(), getGroups()]);
       console.log("Users:", userData);
       console.log("Clients", clientData);
+      console.log("Groups", groupData);
       setUsers(userData);
       setClients(clientData);
+      setRoles(groupData);
     } catch (error) {
       setError(error.error) || "Something went wrong!"
     }
@@ -55,7 +58,8 @@ const deleteSelected = async () => {
 
 const handleEdit = (record) => {
   setSelectedUsers(record);
-  form.setFieldsValue(record);
+  form.setFieldsValue({...record, groups: record.groups?.map
+    (g => typeof g === 'object' ? g.id : g)});
   setModalVisible(true);
 };
 
@@ -68,13 +72,18 @@ const handleAdd = () => {
 const handleSubmit = async (values) => {
   console.log("Form Values:", values);
   try{
+    const payload = {...values, groups: values.groups || []};
   if (selectedUsers) {
-    await putUsers(selectedUsers.id, values);
+    await putUsers(selectedUsers.id, payload);
+    const update = {...selectedUsers, ...payload, groups: 
+      payload.groups.map(id => roles.find(r => r.id === id))}
     setUsers(prev => prev.map(item => item.id === selectedUsers.id ? {...item, ...values} : item));
     toast.success("User updated successfully!");
   }
   else {
-    const newUser = await postUsers(values);
+    const newUser = await postUsers(payload);
+    const post = {...newUser, groups: newUser.groups
+      .map(id => roles.find(r => r.id === id))}
     setUsers(prev => [...prev, newUser]);
     toast.success("User created successfully");
   }
@@ -96,9 +105,14 @@ const columns = [
     }
   },
   {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
+    title: 'First name',
+    dataIndex: 'first_name',
+    key: 'last_name',
+  },
+  {
+    title: 'Last name',
+    dataIndex: 'last_name',
+    key: 'last_name',
   },
   {
     title: 'Email',
@@ -106,9 +120,39 @@ const columns = [
     key: 'email',
   },
   {
-    title: 'Role',
-    dataIndex: 'role',
-    key: 'role',
+    title: 'Phone no.',
+    dataIndex: 'phone',
+    key: 'phone',
+  },
+  {
+    title: 'Roles',
+    dataIndex: 'groups',
+    key: 'groups',
+    render: (_, record) => {
+      // const roles_obj = roles.find(r => r.id === record.roles);  
+      // return roles_obj ? roles_obj.name : 'Unknown';
+      console.log("Groups:", record.groups);
+      // const role_names = (record.roles || []).map
+      // (group_id => {
+      //     const role_map = roles.find(r => r.id === group_id);
+      //     return role_map ? role_map.name : null;
+      // })
+      const groupList = record.groups;
+      if (!Array.isArray(groupList) || groupList.length === 0){
+        return "Undefined";
+      }
+      const roleNames = groupList.map(g => typeof g === 'object' ? g.name : 
+        (roles.find(r => r.id === g)?.name))
+      .filter(Boolean)
+      .join(', ');
+      return roleNames || "Undefined";
+    }
+  },
+  {
+    title: 'Is active',
+    dataIndex: "is_active",
+    key: "is_active",
+    render: (value) => (value ? 'Yes' : 'No')
   },
   {
     title: 'Created at',
@@ -140,7 +184,7 @@ return (
           onFinish={handleSubmit}
           layout='vertical'
       >
-       <AntForm.Item name="client" label = "Client" rules={[{required: true}]}>
+       <AntForm.Item name="client" label = "Client" rules={[{required: false}]}>
         <Select placeholder = "Select Client">  
           {clients.map(client => (
               <Option key={client.id} value={client.id}>
@@ -149,17 +193,35 @@ return (
               ))}
         </Select>
        </AntForm.Item>
-       <AntForm.Item name="name" label="Name" rules={[{required:true}]}>
+       <AntForm.Item name="first_name" label="First name" rules={[{required:true}]}>
             <Input/>
+       </AntForm.Item>
+       <AntForm.Item name = "last_name" label = "Last name">
+              <Input/>
        </AntForm.Item>
        <AntForm.Item name="email" label="Email" rules={[{required: true, type: "email"}]}>
             <Input/>
        </AntForm.Item>
        <AntForm.Item name="password" label="Password" rules={[{required: true}]}>
-            <Input/>
+            <Input.Password/>
         </AntForm.Item>
-       <AntForm.Item name="role" label="Role" rules={[{required: true}]}>
+       <AntForm.Item name="phone" label="Phone no.">
             <Input/>
+       </AntForm.Item>
+       <AntForm.Item name="groups" label="Roles">
+          <Select 
+                  mode='multiple'
+                  placeholder = "Select Roles"
+                  allowClear>
+                {roles.map(group => (
+                  <Option key={group.id} value={group.id}>
+                      {group.name}
+                  </Option>
+                ))}
+                  </Select>
+       </AntForm.Item>
+       <AntForm.Item name="is_active" label="" valuePropName='checked'>
+          <Checkbox>Active</Checkbox>
        </AntForm.Item>
        <AntForm.Item>
         <Button type='primary' htmlType='submit'>
@@ -198,35 +260,37 @@ return (
       </Col>
       </Row>
 
-      <Row gutter={16} style={{marginBottom: '1rem'}}>
-    <Col>
-      <Select placeholder = "Filter by Client"
+      <Row style={{marginBottom: '1rem'}}>
+      <Col>
+      <Input.Search placeholder = "Search users..."
               allowClear
-              style = {{width: 200}}
-              value = {searchClients}
-              onChange = {(value) => setSearchClients(value || null)}>
-                {clients.map(client => (
-                  <Select.Option key={client.id} value={client.id}>
-                    {client.company_name}
-                  </Select.Option>
-                ))}
-        </Select>
-    </Col>
-  </Row>
-
-  {searchClients && (
-  <div style={{marginBottom: '0.5rem'}}>
-    Showing users for: <strong>{clients.find(c => c.id === searchClients)?.company_name}</strong>
-  </div>
-  )}
+              style = {{width: 300}}
+              value = {search}
+              onChange = {(e) => setSearch(e.target.value)}
+              enterButton
+      />
+      </Col>
+      </Row>
+      
       {error && <Alert type='error' message={error} showIcon style={{marginBottom: '1rem'}}/>} 
           {loading ? (<Spin tip="Loading clients..."/>) : 
-            (<Table dataSource={searchClients ? users.filter
-              (user => user.client === searchClients) : users}
+            (<Table dataSource={users.filter((user) => {
+              const Search = (search || '').toLowerCase();
+              return(
+                (user.first_name || '').toLowerCase().includes(Search) ||
+                (user.last_name || '').toLowerCase().includes(Search) ||
+                (user.email || '').toLowerCase().includes(Search)||
+                (user.phone || '').toLowerCase().includes(Search)||
+                (user.created_at ? new Date(user.created_at).toLocaleString() : '').toLowerCase().includes(Search)||
+                (clients.find(c => c.id === user.client)?.company_name || '').
+                toLowerCase().includes(Search)
+              );
+            })
+          }
                     columns={columns}
                     rowKey="id"
                     rowSelection={RowSelection}
-              />
+            />
             )}
       </>
         );
