@@ -18,6 +18,7 @@ function Subscription() {
   const [ currentSub, setCurrentSub] = useState(null);
   const [ form ] = AntForm.useForm();
   const [selectRowKeys, setSelectRowKeys] = useState([]);
+  const [ search, setSearch] = useState('');
   useEffect(() =>{
     const fetchData = async () =>{
     try{
@@ -233,13 +234,34 @@ function Subscription() {
               </Popconfirm>
               </Col>
           </Row>
+          <Row style={{ marginBottom: '1rem'}} >
+            <Col>
+            <Input.Search 
+            placeholder='Search Subscription'
+            value = {search}
+            onChange={(e) => setSearch(e.target.value)} />
+            </Col>
+          </Row>
           {/* Table for the plans fetched */}
           {error && <Alert type = "error" message = {error} showIcon style = {{marginBottom:'1rem'}}/>}
           
           {loading ? (
             <Spin tip = "Loading Subscription...."/>
           ) : (
-            <Table dataSource = {subscription}
+            <Table 
+              dataSource = {subscription.filter((subscribe) => {
+              const Search = (search ||'').toLowerCase();
+              return(
+                (subscribe.clients || '').toLowerCase().includes(Search) ||
+                (subscribe.plans || '').toLowerCase().includes(Search) ||
+                (subscribe.start_date || '').toLowerCase().includes(Search) ||
+                (subscribe.end_date || '').toLowerCase().includes(Search) ||
+                (subscribe.status || '').toLowerCase().includes(Search) ||
+                (clients.find(c => c.id === clients)?.company_name || '').toLowerCase().includes(Search)
+              );
+            }
+          )
+          }
             columns={column}
             rowKey={'id'}
             rowSelection={rowSelect}

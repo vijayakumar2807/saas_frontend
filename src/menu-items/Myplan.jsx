@@ -14,7 +14,7 @@ const MyPlan = {
             title:'My Plan',
             type:'item',
             url:'/my-subscriptions',
-            icon: icon.Strategy,
+            icon: () => <icon.Strategy size={22} color="#053165" weight = 'regular'/>,
             breadcrumbs: false,
         }
     ]

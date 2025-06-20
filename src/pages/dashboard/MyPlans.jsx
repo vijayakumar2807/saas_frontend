@@ -56,17 +56,17 @@ function MyPlans() {
       dataIndex : 'status',
       key: 'status'
     },
-    {
-      title : 'TRIAL',
-      dataIndex :'trial',
-      key : 'trial',
-      render:(val) =>(val ? 'Yes': 'No')
-    },
-    {
-      title : 'USAGE',
-      dataIndex : 'usage',
-      key : 'usage'
-    },
+    // {
+    //   title : 'TRIAL',
+    //   dataIndex :'trial',
+    //   key : 'trial',
+    //   render:(val) =>(val ? 'Yes': 'No')
+    // },
+    // {
+    //   title : 'USAGE',
+    //   dataIndex : 'usage',
+    //   key : 'usage'
+    // },
   ];
 
 
