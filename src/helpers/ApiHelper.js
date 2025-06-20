@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { data } from 'react-router';
 
 // For Vite use import.meta.env, for CRA use process.env
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || process.env.REACT_APP_API_BASE_URL;
@@ -96,7 +97,7 @@ export const deleteUsers = async (id) => {
   }
 };
 
-
+//-----------------------plan crud operations-------------------------
 //read the plan data(getPlans)
 export const getPlans = async() =>{
   try{
@@ -135,7 +136,7 @@ export const deletePlan = async (id) => {
     throw err.res?.data ||{err:"Failed to Delete Plan Data"};
   }
 };
-
+//--------------------------operation over-----------------------------
 // LOGIN (get JWT tokens)
 export const loginUser = async (credentials) => {
   try {
@@ -145,6 +146,59 @@ export const loginUser = async (credentials) => {
     throw error.response?.data || { error: 'Login failed' };
   }
 };
+
+//-------------subscription crud operation----------------
+//get sub data
+export const getSub = async () =>{
+  try{
+    const res = await apiClient.get('/subscription/');
+  return res.data;
+  }catch(err){
+    throw err.res?.data || {err:'Login Failed'};
+  }
+};
+//posting data
+export const postSub = async (subData) => {
+  try{
+    const res = await apiClient.post('/subscription/', subData);
+    console.log(res.data)
+  return res.data;
+  }catch(err){
+    throw err.res?.data || {error:'Failed to Post Data'};
+  }
+};
+//updating data
+export const updateSub = async (id, subData) => {
+  try{
+    const res = await apiClient.put(`/subscription/${id}/`, subData);
+    return res.data;
+  }catch(err){
+    throw err.res?.data || {err:'Failed to update Data'}
+  }
+};
+// delete subscription data
+export const deleteSub = async(id) => {
+  try{
+    const res = await apiClient.delete(`/subscription/${id}/`);
+    return res.data;
+  }catch(err){
+    throw err.res?.data || {err:'Failed to Delete'}
+  }
+};
+
+//get myplan i.E Mysubscription
+export const getMyPlan = async() => {
+  try{
+    const res  = await apiClient.get('/my-subscriptions/');
+    return res.data;
+  }catch(err){
+    throw err.res?.data || { err:'Failed'};
+  }
+};
+
+//--------------------end of operation-------------------------//
+
+
 
 // REFRESH TOKEN
 export const refreshToken = async (refresh) => {

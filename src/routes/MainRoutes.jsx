@@ -12,6 +12,8 @@ const Users = Loadable(lazy(() => import('pages/dashboard/User')));
 const Plans = Loadable(lazy(() => import('pages/dashboard/Plans')));
 const Subscription = Loadable(lazy(() => import('pages/dashboard/Subscription')));
 const Leads = Loadable(lazy(() => import('pages/dashboard/Leads')));
+const MyEmployee = Loadable(lazy(() => import ('pages/dashboard/myemployees')));
+const MyPlans = Loadable(lazy(() => import ('pages/dashboard/MyPlans')));
 const MainRoutes = {
   path: '/',
   element: <PrivateRoute />, // 👈 Protect all child routes
@@ -52,6 +54,14 @@ const MainRoutes = {
         {
           path:'leads',
           element:<Leads/>
+        },
+        {
+          path:'myemployee',
+          element:<MyEmployee/>
+        },
+        {
+          path:'my-subscriptions',
+          element:<MyPlans/>
         }
        
       

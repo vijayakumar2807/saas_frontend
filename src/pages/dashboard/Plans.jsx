@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import {Table, Spin, Alert, Button, Form as AntForm, Modal, Input, message, Popconfirm, Row, Col} from 'antd';
 import{getPlans, postPlan, updatePlan, deletePlan} from '../../helpers/ApiHelper';
+import { style } from '@mui/system';
 import { AlignCenterOutlined } from '@ant-design/icons';
+
 function Plans() {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading ] = useState(true);
@@ -26,7 +28,7 @@ function Plans() {
     }, []);
 
 
-  const rowSelect ={
+  const rowSelect = {
     selectRowKeys,
     onChange: (keys) =>setSelectRowKeys(keys),
   };
@@ -48,7 +50,7 @@ function Plans() {
         await deletePlan(id);
       }
       message.success('Selected Plans Deleted');
-      setPlans(prev => prev.filter(client => !selectRowKeys.includes(plans.id)));
+      setPlans(prev => prev.filter(client => !selectRowKeys.includes(client.id)));
       setSelectRowKeys([]);
     }catch(err){
       message.error('Failed to Delete');
@@ -89,21 +91,15 @@ function Plans() {
       dataIndex:'user_limit',
       key:'user_limit'
     },
-    {
-      title:'AI_Minute',
-      dataIndex:'ai_minutes',
-      key:'ai_minutes'
-    },
+    // {
+    //   title:'AI_Minute',
+    //   dataIndex:'ai_minutes',
+    //   key:'ai_minutes'
+    // },
     {
       title:'Duration',
       dataIndex:'duration',
       key:'duration'
-    },
-    {
-      title:'Date',
-      dataIndex:'date',
-      key:'date',
-      render:(text) => new Date(text).toLocaleDateString(),
     },
     {
       title:'Update',
@@ -133,12 +129,12 @@ function Plans() {
           <AntForm.Item name = 'price' label = 'Price :' rules = {[{required:true}]}>
             <Input/>
           </AntForm.Item>
-          <AntForm.Item name = "user_limit" label = 'Plan Status :' rules = {[{required:true}]}>
+          <AntForm.Item name = "user_limit" label = 'User Limit :' rules = {[{required:true}]}>
             <Input/>
           </AntForm.Item>
-          <AntForm.Item name = 'ai_minutes' label ="AI_MINUTE :" rules = {[{required:true}]}>
+          {/* <AntForm.Item name = 'ai_minutes' label ="AI_MINUTE :" rules = {[{required:true}]}>
             <Input/>
-          </AntForm.Item>
+          </AntForm.Item> */}
           <AntForm.Item name ="duration" label ='DURATION :' rules ={[{required : true}]}>
             <Input/>
           </AntForm.Item>
@@ -186,7 +182,8 @@ function Plans() {
         rowKey={'id'}
         rowSelection={rowSelect}
         />
-      )};
+      )
+    }
     </>
   );
 };
