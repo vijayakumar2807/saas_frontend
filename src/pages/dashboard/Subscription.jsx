@@ -86,32 +86,6 @@ function Subscription() {
 //column to be displayed
   const column = [
     {
-      title : 'START DATE',
-      dataIndex: 'start_date',
-      key:'start_date'
-    },
-    {
-      title: 'END_DATE',
-      dataIndex: 'end_date',
-      key: 'end_date'
-    },
-    {
-      title : 'STATUS',
-      dataIndex : 'status',
-      key: 'status'
-    },
-    {
-      title : 'TRIAL',
-      dataIndex :'trial',
-      key : 'trial',
-      render:(val) =>(val ? 'Yes': 'No')
-    },
-    {
-      title : 'USAGE',
-      dataIndex : 'usage',
-      key : 'usage'
-    },
-    {
       title : 'CLIENT',
       dataIndex :'client',
       key : 'client',
@@ -131,6 +105,32 @@ function Subscription() {
       }
     },
     {
+      title : 'START DATE',
+      dataIndex: 'start_date',
+      key:'start_date'
+    },
+    {
+      title: 'END_DATE',
+      dataIndex: 'end_date',
+      key: 'end_date'
+    },
+    {
+      title : 'STATUS',
+      dataIndex : 'status',
+      key: 'status'
+    },
+    // {
+    //   title : 'TRIAL',
+    //   dataIndex :'trial',
+    //   key : 'trial',
+    //   render:(val) =>(val ? 'Yes': 'No')
+    // },
+    // {
+    //   title : 'USAGE',
+    //   dataIndex : 'usage',
+    //   key : 'usage'
+    // },
+    {
       title : 'UPDATE',
       key : ' update',
       render : (_, record) => (
@@ -138,7 +138,7 @@ function Subscription() {
           () => handleEdit(record)}>EDIT</Button>
       )
     },
-  ];
+  ]
 
 
   return (
@@ -154,21 +154,34 @@ function Subscription() {
             onFinish = {handleSubmit}
             layout='vertical'
             >
-              <AntForm.Item name = 'start_date' label = 'START DATE :' rules ={[{required: true}]}>
-                <Input type = 'Date'/>
-              </AntForm.Item>
-              <AntForm.Item name = 'end_date' label = 'END DATE :' rules = {[{required:true}]}>
-                <Input type = 'Date'/>
-              </AntForm.Item>
+              {currentSub && (
+      <>
+        <AntForm.Item
+          name="start_date"
+          label="START DATE :"
+          rules={[{ required: true }]}
+        >
+          <Input type="date" />
+        </AntForm.Item>
+
+        <AntForm.Item
+          name="end_date"
+          label="END DATE :"
+          rules={[{ required: true }]}
+        >
+          <Input type="date" />
+        </AntForm.Item>
+      </>
+    )}
               <AntForm.Item name = "status" label = 'Status :' rules = {[{required:true}]}>
                 <Input/>
               </AntForm.Item>
-              <AntForm.Item name = 'trial' label ="TRIAL :" valuePropName='checked'>
+              {/* <AntForm.Item name = 'trial' label ="TRIAL :" valuePropName='checked'>
                 <Checkbox>TRAIL</Checkbox>
               </AntForm.Item> 
               <AntForm.Item name ="usage" label ='USAGE :' rules ={[{required : true}]}>
                 <Input/>
-              </AntForm.Item>
+              </AntForm.Item> */}
               <AntForm.Item name = 'client' label = 'CLIENT :' rules = {[{required: true}]}>
                 <Select placeholder = 'Select Client'>
                   {
@@ -231,7 +244,8 @@ function Subscription() {
             rowKey={'id'}
             rowSelection={rowSelect}
             />
-          )};
+          )
+        }
         </>
   )
 };

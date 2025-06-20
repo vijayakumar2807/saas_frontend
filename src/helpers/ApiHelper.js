@@ -185,7 +185,20 @@ export const deleteSub = async(id) => {
     throw err.res?.data || {err:'Failed to Delete'}
   }
 };
-//--------------------end of operation-------------------------
+
+//get myplan i.E Mysubscription
+export const getMyPlan = async() => {
+  try{
+    const res  = await apiClient.get('/my-subscriptions/');
+    return res.data;
+  }catch(err){
+    throw err.res?.data || { err:'Failed'};
+  }
+};
+
+//--------------------end of operation-------------------------//
+
+
 
 // REFRESH TOKEN
 export const refreshToken = async (refresh) => {

@@ -60,14 +60,6 @@ function Clients() {
     form.resetFields();
     setModalVisible(true);
   };
-
-  // const filterClients = Clients.filter(client => 
-  //   Object.values(client)
-  //   .join(' ')
-  //   .toLowerCase()
-  //   .includes(searchText.toLowerCase())
-  // );
-
   const handleFormSubmit = async (values) => {
     try {
       if (currentClient) {

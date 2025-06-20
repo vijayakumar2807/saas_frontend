@@ -91,11 +91,11 @@ function Plans() {
       dataIndex:'user_limit',
       key:'user_limit'
     },
-    {
-      title:'AI_Minute',
-      dataIndex:'ai_minutes',
-      key:'ai_minutes'
-    },
+    // {
+    //   title:'AI_Minute',
+    //   dataIndex:'ai_minutes',
+    //   key:'ai_minutes'
+    // },
     {
       title:'Duration',
       dataIndex:'duration',
@@ -129,12 +129,12 @@ function Plans() {
           <AntForm.Item name = 'price' label = 'Price :' rules = {[{required:true}]}>
             <Input/>
           </AntForm.Item>
-          <AntForm.Item name = "user_limit" label = 'Plan Status :' rules = {[{required:true}]}>
+          <AntForm.Item name = "user_limit" label = 'User Limit :' rules = {[{required:true}]}>
             <Input/>
           </AntForm.Item>
-          <AntForm.Item name = 'ai_minutes' label ="AI_MINUTE :" rules = {[{required:true}]}>
+          {/* <AntForm.Item name = 'ai_minutes' label ="AI_MINUTE :" rules = {[{required:true}]}>
             <Input/>
-          </AntForm.Item>
+          </AntForm.Item> */}
           <AntForm.Item name ="duration" label ='DURATION :' rules ={[{required : true}]}>
             <Input/>
           </AntForm.Item>
@@ -182,7 +182,8 @@ function Plans() {
         rowKey={'id'}
         rowSelection={rowSelect}
         />
-      )};
+      )
+    }
     </>
   );
 };
